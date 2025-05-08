@@ -1,1 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DriveWise - Driver Portal</title>
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Animate.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <style>
+      :root {
+        --primary: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary: #3f37c9;
+        --accent: #4895ef;
+        --dark: #1a1a2e;
+        --light: #f8f9fa;
+        --success: #4cc9f0;
+        --warning: #f8961e;
+        --danger: #f72585;
+        --gray: #6c757d;
+        --dark-gray: #343a40;
+      }
 
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #0f0f1a, #2b2d42);
+        color: var(--light);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* Floating background elements */
+      .bg-circle {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.15;
+        z-index: -1;
+      }
+
+      .circle-1 {
+        width: 600px;
+        height: 600px;
+        background: var(--accent);
+        top: -200px;
+        left: -200px;
+        animation: float 15s ease-in-out infinite;
+      }
+
+      .circle-2 {
+        width: 400px;
+        height: 400px;
+        background: var(--danger);
+        bottom: -100px;
+        right: -100px;
+        animation: float 12s ease-in-out infinite reverse;
+      }
+
+      .circle-3 {
+        width: 300px;
+        height: 300px;
+        background: var(--success);
+        top: 50%;
+        right: 20%;
+        animation: float 10s ease-in-out infinite 2s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(50px, 50px);
+        }
+      }
+
+      /* Main container */
+      .driver-portal {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        position: relative;
+      }
+
+      /* Header */
+      .portal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+        animation: fadeInDown 0.8s ease-out;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .logo-icon {
+        font-size: 2.5rem;
+        color: var(--accent);
+      }
+
+      .logo-text {
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.8rem;
+        font-weight: 800;
+        background: linear-gradient(to right, var(--accent), var(--success));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .wallet-status {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .wallet-status:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .wallet-icon {
+        font-size: 1.2rem;
+        color: var(--accent);
+      }
+
+      .wallet-address {
+        font-size: 0.9rem;
+        font-weight: 500;
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .wallet-connected {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .connection-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      /* Auth container */
+      .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+      }
+
+      .auth-box {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 500px;
+        overflow: hidden;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: fadeInUp 0.8s ease-out;
+      }
+
+      .auth-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .auth-header {
+        padding: 1.5rem;
+        text-align: center;
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+        color: white;
+        position: relative;
+      }
+
+      .auth-header h2 {
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .auth-header p {
+        opacity: 0.9;
+        font-size: 0.9rem;
+      }
+
+      .auth-decoration {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        top: -50px;
+        right: -50px;
+      }
+
+      .auth-decoration-2 {
+        width: 100px;
+        height: 100px;
+        bottom: -30px;
+        left: -30px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .auth-body {
+        padding: 2rem;
+      }
+
+      /* Form styles */
+      .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: white;
+        font-family: "Poppins", sans-serif;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
+      }
+
+      .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* Profile picture */
+      .profile-upload {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .profile-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--accent);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .profile-preview:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .profile-preview::before {
+        content: "\f030";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 1.5rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+      }
+
+      .profile-preview::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 50%;
+      }
+
+      .profile-preview:hover::before,
+      .profile-preview:hover::after {
+        opacity: 1;
+      }
+
+      .upload-text {
+        display: block;
+        margin-top: 0.75rem;
+        color: var(--accent);
+        font-weight: 500;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .upload-text:hover {
+        color: var(--success);
+      }
+
+      /* Password strength */
+      .password-strength {
+        margin-top: 0.5rem;
+      }
+
+      .strength-meter {
+        height: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 0.25rem;
+      }
+
+      .strength-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--danger);
+        border-radius: 5px;
+        transition: all 0.3s ease;
+      }
+
+      .strength-text {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* Button styles */
+      .btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .btn-primary {
+        background: linear-gradient(to right, var(--primary), var(--accent));
+        color: white;
+        box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(
+          to right,
+          var(--primary-dark),
+          var(--accent)
+        );
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+      }
+
+      .btn-block {
+        display: block;
+        width: 100%;
+      }
+
+      /* Toggle link */
+      .toggle-link {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .toggle-link a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .toggle-link a:hover {
+        color: var(--success);
+        text-decoration: underline;
+      }
+
+      /* Error message */
+      .error-message {
+        color: var(--danger);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      /* Form switch animation */
+      .auth-form {
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      /* File input */
+      .file-input {
+        display: none;
+      }
+
+      /* MetaMask connect button */
+      .metamask-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background: linear-gradient(to right, #f6851b, #e2761b);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        font-family: "Poppins", sans-serif;
+        width: 100%;
+      }
+
+      .metamask-btn:hover {
+        background: linear-gradient(to right, #e2761b, #d66b0e);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(230, 118, 27, 0.4);
+      }
+
+      .metamask-icon {
+        font-size: 1.5rem;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 768px) {
+        .portal-header {
+          flex-direction: column;
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+
+        .auth-box {
+          max-width: 100%;
+        }
+
+        .auth-body {
+          padding: 1.5rem;
+        }
+      }
+
+      /* Animation classes */
+      .animate-delay-1 {
+        animation-delay: 0.2s;
+      }
+
+      .animate-delay-2 {
+        animation-delay: 0.4s;
+      }
+
+      .animate-delay-3 {
+        animation-delay: 0.6s;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background elements -->
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+
+    <!-- Driver Portal Container -->
+    <div class="driver-portal">
+      <!-- Header -->
+      <header class="portal-header">
+        <div class="logo">
+          <div class="logo-icon"><i class="fas fa-car-side"></i></div>
+          <div class="logo-text">DriveWise</div>
+        </div>
+        <div class="wallet-status" id="walletStatus">
+          <i class="fas fa-wallet wallet-icon"></i>
+          <div class="wallet-address" id="walletAddress">Not connected</div>
+        </div>
+      </header>
+
+      <!-- Authentication Container (shown by default) -->
+      <div class="auth-container" id="authContainer">
+        <div class="auth-box">
+          <div class="auth-decoration"></div>
+          <div class="auth-decoration auth-decoration-2"></div>
+          <div class="auth-header">
+            <h2 id="authTitle">Driver Login</h2>
+            <p id="authSubtitle">Access your driver account</p>
+          </div>
+          <div class="auth-body">
+            <!-- MetaMask Connect Button -->
+            <button class="metamask-btn" id="connectWalletBtn">
+              <i class="fab fa-ethereum metamask-icon"></i>
+              <span>Connect with MetaMask</span>
+            </button>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+              <div class="form-group animate__animated animate__fadeIn">
+                <label for="login-email">Email</label>
+                <input
+                  type="email"
+                  id="login-email"
+                  class="form-control"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-1"
+              >
+                <label for="login-password">Password</label>
+                <input
+                  type="password"
+                  id="login-password"
+                  class="form-control"
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+              <p class="error-message" id="login-error">
+                Invalid credentials. Please try again.
+              </p>
+              <button
+                type="submit"
+                class="btn btn-primary btn-block animate__animated animate__fadeIn animate-delay-2"
+              >
+                Login
+              </button>
+              <div
+                class="toggle-link animate__animated animate__fadeIn animate-delay-3"
+              >
+                Don't have an account?
+                <a href="#" id="register-link">Register</a>
+              </div>
+            </form>
+
+            <!-- Registration Form -->
+            <form id="register-form" class="auth-form" style="display: none">
+              <!-- Profile Picture -->
+              <div class="profile-upload animate__animated animate__fadeIn">
+                <input
+                  type="file"
+                  id="profilePic"
+                  class="file-input"
+                  accept="image/*"
+                />
+                <label for="profilePic">
+                  <img
+                    src="https://via.placeholder.com/120"
+                    alt="Profile Preview"
+                    class="profile-preview"
+                    id="profilePreview"
+                  />
+                  <span class="upload-text"
+                    >Click to upload profile picture</span
+                  >
+                </label>
+              </div>
+
+              <!-- Personal Information -->
+              <div class="form-group animate__animated animate__fadeIn">
+                <label for="full-name">Vehicle Owner Name</label>
+                <input
+                  type="text"
+                  id="full-name"
+                  class="form-control"
+                  placeholder="Enter your full name"
+                  pattern="[A-Za-z\s]+"
+                  title="Only alphabets and spaces are allowed."
+                  required
+                />
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-1"
+              >
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" class="form-control" required />
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-1"
+              >
+                <label for="gender">Gender</label>
+                <select id="gender" class="form-control" required>
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-2"
+              >
+                <label for="cnic">CNIC/NICOP Number</label>
+                <input
+                  type="text"
+                  id="cnic"
+                  class="form-control"
+                  placeholder="Enter your CNIC/NICOP number (e.g., 12345-6789012-3)"
+                  pattern="\d{5}-\d{7}-\d{1}"
+                  title="CNIC/NICOP must be in the format 12345-6789012-3."
+                  required
+                />
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-2"
+              >
+                <label for="phone">Contact Number</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  class="form-control"
+                  placeholder="Enter your contact number (e.g., 0300-1234567)"
+                  pattern="\d{4}-\d{7}"
+                  title="Contact number must be in the format 0300-1234567."
+                  required
+                />
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-3"
+              >
+                <label for="email">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  placeholder="Enter your email"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                  title="Enter a valid email address."
+                  required
+                />
+              </div>
+              <!-- Password -->
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-3"
+              >
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  placeholder="Enter your password"
+                  required
+                />
+                <div class="password-strength">
+                  <div class="strength-meter">
+                    <div class="strength-fill" id="passwordStrength"></div>
+                  </div>
+                  <div class="strength-text">
+                    Password Strength: <span id="strengthText">Weak</span>
+                  </div>
+                </div>
+                <small class="error-message" id="passwordError"></small>
+              </div>
+              <div class="form-group animate__animated animate__fadeIn">
+                <label for="license-number">License Number</label>
+                <input
+                  type="text"
+                  id="license-number"
+                  class="form-control"
+                  placeholder="Enter your license number (e.g., ABC-1234567)"
+                  pattern="[A-Za-z]{2,3}-\d{5,7}"
+                  title="License number must be in the format ABC-1234567."
+                  required
+                />
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-1"
+              >
+                <label for="vehicle-number">Vehicle Number</label>
+                <input
+                  type="text"
+                  id="vehicle-number"
+                  class="form-control"
+                  placeholder="Enter your vehicle number (e.g., ABC-4567)"
+                />
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-1"
+              >
+                <label for="vehicle-type">Vehicle Type</label>
+                <select id="vehicle-type" class="form-control" required>
+                  <option value="">Select Vehicle Type</option>
+                  <option value="car">Car</option>
+                  <option value="motorcycle">Bike</option>
+                  <option value="truck">Auto</option>
+                </select>
+              </div>
+              <!-- License Picture -->
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-2"
+              >
+                <label for="license-pic">License Picture</label>
+                <input
+                  type="file"
+                  id="license-pic"
+                  class="form-control file-input"
+                  accept="image/*"
+                  required
+                />
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-2"
+              >
+                <label for="vehicle-pic">Vehicle Picture</label>
+                <input
+                  type="file"
+                  id="vehicle-pic"
+                  class="form-control file-input"
+                  accept="image/*"
+                />
+              </div>
+              <div
+                class="form-group animate__animated animate__fadeIn animate-delay-3"
+              >
+                <label for="address">Address</label>
+                <textarea
+                  id="address"
+                  class="form-control"
+                  placeholder="Enter your address"
+                  rows="3"
+                  pattern="[A-Za-z0-9\s.,-]+"
+                  title="Only alphanumeric characters, spaces, and common punctuation are allowed."
+                  required
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-block animate__animated animate__fadeIn animate-delay-3"
+              >
+                Register
+              </button>
+              <div
+                class="toggle-link animate__animated animate__fadeIn animate-delay-3"
+              >
+                Already have an account? <a href="#" id="login-link">Login</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Web3.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <!-- IPFS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.min.js"></script>
+    <!-- Custom Script -->
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client@56.0.1/dist/index.min.js"></script>
+    <script>
+// Configuration
+const CONTRACT_ADDRESS = "0xa624AB1344DE2560acF3C5d60DebD6357DbD54D7"; // Replace with your deployed contract address
+const CONTRACT_ABI = [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "driverAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "email",
+          "type": "string"
+        }
+      ],
+      "name": "DriverRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "driverAddress",
+          "type": "address"
+        }
+      ],
+      "name": "DriverUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "drivers",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "passwordHash",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "phone",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "cnic",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "licenseNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "vehicleNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "physicalAddress",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "ipfsHash",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "name": "emailToAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_email",
+          "type": "string"
+        }
+      ],
+      "name": "getDriverByEmail",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_email",
+          "type": "string"
+        }
+      ],
+      "name": "isDriverRegistered",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_wallet",
+          "type": "address"
+        }
+      ],
+      "name": "isWalletRegistered",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_email",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_passwordHash",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_phone",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_cnic",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_licenseNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_vehicleNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_physicalAddress",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_ipfsHash",
+          "type": "string"
+        }
+      ],
+      "name": "registerDriver",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_phone",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_licenseNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_vehicleNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_physicalAddress",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_ipfsHash",
+          "type": "string"
+        }
+      ],
+      "name": "updateDriver",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_email",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_passwordHash",
+          "type": "string"
+        }
+      ],
+      "name": "verifyLogin",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ];
+const IPFS_NODE_URL = "http://127.0.0.1:5001"; // Local IPFS node
+
+// DOM Elements
+const authContainer = document.getElementById('authContainer');
+const loginForm = document.getElementById('login-form');
+const registerForm = document.getElementById('register-form');
+const connectWalletBtn = document.getElementById('connectWalletBtn');
+const walletAddress = document.getElementById('walletAddress');
+const loginError = document.getElementById('login-error');
+const profilePreview = document.getElementById('profilePreview');
+
+// Application State
+let web3;
+let contract;
+let ipfs;
+let currentAccount;
+let driverData = null;
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', async () => {
+    await initApp();
+});
+
+async function initApp() {
+    // Check if Web3 is injected (MetaMask)
+    if (window.ethereum) {
+        try {
+            // Request account access
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            web3 = new Web3(window.ethereum);
+            
+            // Initialize contract
+            contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+            
+            // Initialize IPFS
+            ipfs = await initIPFS();
+            
+            // Get current account
+            const accounts = await web3.eth.getAccounts();
+            currentAccount = accounts[0];
+            updateWalletStatus(currentAccount);
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Handle account changes
+            window.ethereum.on('accountsChanged', handleAccountsChanged);
+            
+            // Check if user is already logged in
+            checkExistingSession();
+            
+        } catch (error) {
+            console.error("Initialization error:", error);
+            showNotification("Failed to initialize application. Please try again.", "error");
+        }
+    } else {
+        showNotification("Please install MetaMask to use this application.", "warning");
+        connectWalletBtn.disabled = true;
+        connectWalletBtn.textContent = "MetaMask Not Installed";
+        connectWalletBtn.style.background = "linear-gradient(to right, #ff3b2f, #f72585)";
+        connectWalletBtn.onclick = () => {
+            window.open('https://metamask.io/download.html', '_blank');
+        };
+    }
+}
+
+// Initialize local IPFS node
+async function initIPFS() {
+    try {
+        const ipfsClient = await window.IpfsHttpClient.create({
+            host: '127.0.0.1',
+            port: 5001,
+            protocol: 'http'
+        });
+        
+        // Verify connection
+        const version = await ipfsClient.version();
+        console.log("Connected to IPFS node version:", version.version);
+        return ipfsClient;
+    } catch (error) {
+        console.error("IPFS initialization error:", error);
+        showNotification("Failed to connect to local IPFS node. Please ensure it's running on port 5001.", "error");
+        throw error;
+    }
+}
+
+// Set up all event listeners
+function setupEventListeners() {
+    // Login form submission
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await handleLogin();
+    });
+    
+    // Registration form submission
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await handleRegistration();
+    });
+    
+    // Profile picture upload
+    document.getElementById('profilePic').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                profilePreview.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Password strength checker
+    document.getElementById('password').addEventListener('input', function() {
+        updatePasswordStrength(this.value);
+    });
+    
+    // Form toggle links
+    document.getElementById('register-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        switchToRegisterForm();
+    });
+    
+    document.getElementById('login-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        switchToLoginForm();
+    });
+}
+
+// Improved handleLogin function
+async function handleLogin() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    
+    try {
+        // Hide any previous error
+        loginError.style.display = 'none';
+        
+        // Validate inputs
+        if (!email || !password) {
+            throw new Error("Please enter both email and password");
+        }
+
+        // Hash the password
+        const passwordHash = await hashPassword(password);
+        
+        // Verify credentials on blockchain
+        const isValid = await contract.methods.verifyLogin(email, passwordHash)
+            .call({ from: currentAccount });
+        
+        if (isValid) {
+            // Get driver data from blockchain
+            const driver = await contract.methods.getDriverByEmail(email)
+                .call({ from: currentAccount });
+            
+            // Get additional data from IPFS
+            let ipfsData = {};
+            if (driver[7] && driver[7] !== "") { // ipfsHash is at index 7
+                ipfsData = await fetchIPFSData(driver[7]);
+            }
+            
+            // Combine blockchain and IPFS data
+            driverData = {
+                email: driver[0],
+                passwordHash: driver[1],
+                phone: driver[2],
+                cnic: driver[3],
+                licenseNumber: driver[4],
+                vehicleNumber: driver[5],
+                address: driver[6],
+                ipfsHash: driver[7],
+                walletAddress: driver[8],
+                ...ipfsData
+            };
+            
+            // Store session
+            localStorage.setItem('driverSession', JSON.stringify({
+                email: driverData.email,
+                walletAddress: currentAccount,
+                lastLogin: new Date().toISOString()
+            }));
+            
+            // Redirect to dashboard page after successful login
+            window.location.href = "/driverDashboard.html";
+            
+        } else {
+            throw new Error("Invalid credentials");
+        }
+    } catch (error) {
+        console.error("Login error:", error);
+        loginError.textContent = error.message.includes("revert") 
+            ? "Invalid email or password" 
+            : error.message;
+        loginError.style.display = 'block';
+    }
+}
+
+// Handle registration form submission
+async function handleRegistration() {
+    if (!currentAccount) {
+        showNotification("Please connect your wallet first", "error");
+        return;
+    }
+    
+    try {
+        // Prepare IPFS data
+        const ipfsData = {
+            profileImage: await getFileData('profilePic'),
+            driverName: document.getElementById('full-name').value,
+            dob: document.getElementById('dob').value,
+            gender: document.getElementById('gender').value,
+            vehicleType: document.getElementById('vehicle-type').value,
+            licensePicture: await getFileData('license-pic'),
+            vehiclePicture: await getFileData('vehicle-pic')
+        };
+        
+        // Upload to IPFS
+        const ipfsHash = await uploadToIPFS(ipfsData);
+        
+        // Hash the password
+        const passwordHash = await hashPassword(document.getElementById('password').value);
+        
+        // Register on blockchain
+        await contract.methods.registerDriver(
+            document.getElementById('email').value,
+            passwordHash,
+            document.getElementById('phone').value,
+            document.getElementById('cnic').value,
+            document.getElementById('license-number').value,
+            document.getElementById('vehicle-number').value,
+            document.getElementById('address').value,
+            ipfsHash
+        ).send({ from: currentAccount });
+        
+        showNotification("Registration successful! You can now login.", "success");
+        switchToLoginForm();
+        
+    } catch (error) {
+        console.error("Registration error:", error);
+        showNotification(`Registration failed: ${error.message}`, "error");
+    }
+}
+
+// Upload data to local IPFS node
+async function uploadToIPFS(data) {
+    try {
+        // Convert data to JSON string
+        const dataString = JSON.stringify(data);
+        
+        // Add to IPFS
+        const { cid } = await ipfs.add(dataString);
+        
+        // Pin the data to ensure it stays available
+        await ipfs.pin.add(cid);
+        
+        console.log("Data uploaded to IPFS with CID:", cid.toString());
+        return cid.toString();
+    } catch (error) {
+        console.error("IPFS upload error:", error);
+        throw new Error("Failed to upload data to IPFS");
+    }
+}
+
+// Fetch data from local IPFS node
+async function fetchIPFSData(ipfsHash) {
+    try {
+        let content = '';
+        
+        // Fetch the content from IPFS
+        for await (const chunk of ipfs.cat(ipfsHash)) {
+            content += new TextDecoder().decode(chunk);
+        }
+        
+        return JSON.parse(content);
+    } catch (error) {
+        console.error("IPFS fetch error:", error);
+        return {};
+    }
+}
+
+// Check for existing session
+async function checkExistingSession() {
+    const session = localStorage.getItem('driverSession');
+    if (session) {
+        try {
+            const { email, walletAddress } = JSON.parse(session);
+            
+            // Verify wallet is still connected
+            const accounts = await web3.eth.getAccounts();
+            if (accounts[0].toLowerCase() === walletAddress.toLowerCase()) {
+                // Auto-login
+                document.getElementById('login-email').value = email;
+                document.getElementById('login-password').focus();
+                showNotification("Wallet connected. Please enter your password to continue.", "info");
+            }
+        } catch (error) {
+            console.error("Session check error:", error);
+            localStorage.removeItem('driverSession');
+        }
+    }
+}
+
+// Helper Functions
+
+async function getFileData(inputId) {
+    const fileInput = document.getElementById(inputId);
+    if (fileInput.files.length > 0) {
+        return await fileToBase64(fileInput.files[0]);
+    }
+    return null;
+}
+
+async function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function updatePasswordStrength(password) {
+    const strength = calculatePasswordStrength(password);
+    const strengthBar = document.getElementById('passwordStrength');
+    const strengthText = document.getElementById('strengthText');
+    
+    const colors = ['#ff3b2f', '#ff9500', '#ffcc00', '#4cd964'];
+    const labels = ['Very Weak', 'Weak', 'Medium', 'Strong'];
+    
+    strengthBar.style.width = `${(strength / 4) * 100}%`;
+    strengthBar.style.backgroundColor = colors[strength - 1] || colors[0];
+    strengthText.textContent = labels[strength - 1] || labels[0];
+    strengthText.style.color = colors[strength - 1] || colors[0];
+}
+
+function calculatePasswordStrength(password) {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    return strength;
+}
+
+function updateWalletStatus(account) {
+    if (account) {
+        const shortened = `${account.substring(0, 6)}...${account.substring(account.length - 4)}`;
+        walletAddress.textContent = shortened;
+    } else {
+        walletAddress.textContent = 'Not connected';
+    }
+}
+
+function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+        // MetaMask is locked or user disconnected all accounts
+        currentAccount = null;
+        updateWalletStatus(null);
+        showNotification("Wallet disconnected. Please reconnect to continue.", "warning");
+    } else {
+        currentAccount = accounts[0];
+        updateWalletStatus(currentAccount);
+    }
+}
+
+function switchToLoginForm() {
+    registerForm.style.display = 'none';
+    loginForm.style.display = 'block';
+    document.getElementById('authTitle').textContent = 'Driver Login';
+    document.getElementById('authSubtitle').textContent = 'Access your driver account';
+}
+
+function switchToRegisterForm() {
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+    document.getElementById('authTitle').textContent = 'Driver Registration';
+    document.getElementById('authSubtitle').textContent = 'Create your driver account';
+}
+
+function showNotification(message, type) {
+    // In a real app, you would implement a proper notification system
+    console.log(`${type}: ${message}`);
+    alert(`${type}: ${message}`);
+}
+    </script>
+  </body>
+</html>

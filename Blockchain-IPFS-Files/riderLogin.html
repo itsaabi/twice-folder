@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Portal | Secure Blockchain Login</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/ipfs-http-client@latest/dist/index.min.js"></script>
+    
+    <!-- Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    
+    <style>
+        :root {
+            --primary: #6C4DF6;
+            --primary-dark: #5A3ED9;
+            --secondary: #FF7D29;
+            --dark: #1E1E2C;
+            --light: #F8F9FA;
+            --success: #28A745;
+            --danger: #DC3545;
+            --warning: #FD7E14;
+            --info: #17A2B8;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 0;
+        }
+        
+        .rider-illustration {
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 400px;
+            height: 400px;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/4812/4812039.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom right;
+            opacity: 0.1;
+            z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        
+        .container-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+        }
+        
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-sizing: border-box;
+    max-height: 100vh;
+        }
+        
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--gradient);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo img {
+            height: 60px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.1));
+        }
+        
+        .logo h2 {
+            color: var(--dark);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .logo p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--dark);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 77, 246, 0.2);
+            outline: none;
+        }
+        
+        .form-control::placeholder {
+            color: #aaa;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+            gap: 16px;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(108, 77, 246, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #FF6A00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 77, 246, 0.4);
+        }
+        
+        .btn-outline-primary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-meta {
+            background: #F6851B;
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(246, 133, 27, 0.3);
+        }
+        
+        .btn-meta:hover {
+            background: #E2761B;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(246, 133, 27, 0.4);
+        }
+        
+        .btn-google {
+            background: #4285F4;
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+        }
+        
+        .btn-google:hover {
+            background: #357AE8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+            margin: 0 1rem;
+        }
+        
+        .toggle-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .toggle-link a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-link a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .password-strength {
+            margin-top: 0.5rem;
+        }
+        
+        .password-strength progress {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            border: none;
+        }
+        
+        .password-strength progress::-webkit-progress-bar {
+            background-color: #f0f0f0;
+            border-radius: 3px;
+        }
+        
+        .password-strength progress::-webkit-progress-value {
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .password-strength small {
+            display: block;
+            margin-top: 0.25rem;
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        /* Password Strength Colors */
+        #passwordStrength[value="1"]::-webkit-progress-value {
+            background-color: var(--danger);
+        }
+        
+        #passwordStrength[value="2"]::-webkit-progress-value {
+            background-color: var(--warning);
+        }
+        
+        #passwordStrength[value="3"]::-webkit-progress-value,
+        #passwordStrength[value="4"]::-webkit-progress-value {
+            background-color: var(--success);
+        }
+        
+        .profile-picture {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-picture img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-picture img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .upload-text {
+            display: block;
+            margin-top: 0.75rem;
+            color: var(--primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-picture:hover .upload-text {
+            color: var(--primary-dark);
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .form-check-input {
+            margin-right: 0.5rem;
+            width: 1.2em;
+            height: 1.2em;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .form-check-label {
+            color: #666;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .forgot-password {
+            text-align: right;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .forgot-password a {
+            color: #666;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .forgot-password a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        /* Animation classes */
+        .animate-pop {
+            animation: popIn 0.4s ease-out forwards;
+        }
+        
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            80% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-card {
+                padding: 1.5rem;
+            }
+            
+            .logo img {
+                height: 50px;
+            }
+            
+            .logo h2 {
+                font-size: 1.5rem;
+            }
+            
+            .rider-illustration {
+                width: 300px;
+                height: 300px;
+                bottom: -30px;
+                right: -30px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .auth-card {
+                padding: 1.25rem;
+            }
+            
+            .logo img {
+                height: 40px;
+            }
+            
+            .logo h2 {
+                font-size: 1.3rem;
+            }
+            
+            .profile-picture img {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .rider-illustration {
+                width: 200px;
+                height: 200px;
+                opacity: 0.05;
+            }
+        }
+        
+        /* MetaMask connection status */
+        .meta-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            background-color: rgba(246, 133, 27, 0.1);
+            color: #F6851B;
+        }
+        
+        .meta-status.connected {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .meta-status i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Wallet address display */
+        .wallet-address {
+            font-family: monospace;
+            font-size: 0.8rem;
+            word-break: break-all;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+        
+        /* Country code dropdown styling */
+        .iti {
+            width: 100%;
+        }
+        
+        .iti__selected-flag {
+            padding: 0 10px 0 15px;
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .iti__arrow {
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            border-top: 4px solid #555;
+        }
+        
+        .iti__country-list {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 5px;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* IPFS status indicator */
+        .ipfs-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .ipfs-status.connected {
+            background: rgba(40, 167, 69, 0.9);
+        }
+        
+        .ipfs-status.error {
+            background: rgba(220, 53, 69, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="rider-illustration animate-float"></div>
+    
+    <div class="container-wrapper">
+        <!-- Login Form -->
+        <div class="auth-card animate__animated animate__fadeIn" id="login-card" style="height: auto; max-height: 126vh;">
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/2965/2965300.png" alt="Rider Portal" class="animate__animated animate__bounceIn">
+                <h2 class="animate__animated animate__fadeIn">Welcome Back, Rider!</h2>
+                <p class="animate__animated animate__fadeIn">Log in to access your rider dashboard</p>
+            </div>
+            
+            <div id="meta-status" class="meta-status animate__animated animate__fadeIn" style="display: none;">
+                <i class="fab fa-ethereum"></i>
+                <span id="status-text">Not Connected</span>
+            </div>
+            
+            <button id="connect-meta" class="btn btn-meta animate__animated animate__fadeInUp">
+                <i class="fab fa-ethereum"></i> Connect with MetaMask
+            </button>
+            
+            <div class="divider animate__animated animate__fadeIn">
+                <span>OR</span>
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group animate__animated animate__fadeIn">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" class="form-control" id="login-email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group animate__animated animate__fadeIn">
+                    <label for="login-password">Password</label>
+                    <input type="password" class="form-control" id="login-password" placeholder="Enter your password" required>
+                    <div class="forgot-password">
+                        <a href="#" id="forgot-password">Forgot Password?</a>
+                    </div>
+                </div>
+                
+                <div class="form-check animate__animated animate__fadeIn">
+                    <input class="form-check-input" type="checkbox" id="remember-me">
+                    <label class="form-check-label" for="remember-me">Remember me</label>
+                </div>
+                
+                <p class="error-message animate__animated animate__fadeIn" id="login-error">Invalid credentials. Please try again.</p>
+                
+                <button type="submit" class="btn btn-primary animate__animated animate__fadeInUp">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                
+                <div class="toggle-link animate__animated animate__fadeIn">
+                    Don't have an account? <a href="#" id="show-register">Create Account</a>
+                </div>
+            </form>
+            
+            <div class="social-login animate__animated animate__fadeIn">
+                <button class="btn btn-google mt-3">
+                    <i class="fab fa-google"></i> Continue with Google
+                </button>
+            </div>
+        </div>
+        
+        <!-- Registration Form -->
+        <div class="auth-card animate__animated animate__fadeIn" id="register-card" style="display: none; height: auto; max-height: 180vh;">
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/2965/2965300.png" alt="Rider Portal">
+                <h2>Join Our Rider Network</h2>
+                <p>Create your rider account in minutes</p>
+            </div>
+            
+            <form id="register-form">
+                <div class="profile-picture animate__animated animate__fadeIn">
+                    <input type="file" id="profile-pic" accept="image/*" hidden>
+                    <label for="profile-pic">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Picture" id="profile-preview">
+                        <span class="upload-text">Upload Profile Photo</span>
+                    </label>
+                    <small class="error-message" id="profile-error"></small>
+                </div>
+                
+                <div class="row animate__animated animate__fadeIn">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" class="form-control" id="first-name" placeholder="First name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" class="form-control" id="last-name" placeholder="Last name" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group animate__animated animate__fadeIn">
+                    <label for="register-email">Email Address</label>
+                    <input type="email" class="form-control" id="register-email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group animate__animated animate__fadeIn">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
+                </div>
+                
+                <div class="form-group animate__animated animate__fadeIn">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Create a password" required>
+                    <div class="password-strength">
+                        <progress id="password-strength" value="0" max="4"></progress>
+                        <small>Password Strength: <span id="strength-text">Weak</span></small>
+                    </div>
+                    <small class="error-message" id="password-error"></small>
+                </div>
+                
+                <div class="form-group animate__animated animate__fadeIn">
+                    <label for="address">Address</label>
+                    <input type="text" class="form-control" id="address" placeholder="Enter your address" required>
+                </div>
+                
+                <div class="form-check animate__animated animate__fadeIn">
+                    <input class="form-check-input" type="checkbox" id="terms" required>
+                    <label class="form-check-label" for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary animate__animated animate__fadeInUp">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+                
+                <div class="toggle-link animate__animated animate__fadeIn">
+                    Already have an account? <a href="#" id="show-login">Sign In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- IPFS status indicator -->
+    <div id="ipfs-status" class="ipfs-status">
+        <i class="fas fa-circle-notch fa-spin"></i> Connecting to local IPFS node...
+    </div>
+
+    <!-- MetaMask SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/sdk@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+    // DOM Elements
+    const loginCard = document.getElementById('login-card');
+    const registerCard = document.getElementById('register-card');
+    const showRegister = document.getElementById('show-register');
+    const showLogin = document.getElementById('show-login');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const profilePicInput = document.getElementById('profile-pic');
+    const profilePreview = document.getElementById('profile-preview');
+    const passwordInput = document.getElementById('password');
+    const passwordStrength = document.getElementById('password-strength');
+    const strengthText = document.getElementById('strength-text');
+    const connectMetaBtn = document.getElementById('connect-meta');
+    const metaStatus = document.getElementById('meta-status');
+    const statusText = document.getElementById('status-text');
+    const ipfsStatus = document.getElementById('ipfs-status');
+    
+    // Blockchain Integration Variables
+    let web3;
+    let riderPortalContract;
+    const contractABI = [
+        {
+            "inputs": [
+                {"internalType": "string", "name": "_profilePicCID", "type": "string"},
+                {"internalType": "string", "name": "_firstName", "type": "string"},
+                {"internalType": "string", "name": "_lastName", "type": "string"},
+                {"internalType": "string", "name": "_contactNumber", "type": "string"},
+                {"internalType": "string", "name": "_email", "type": "string"},
+                {"internalType": "string", "name": "_passwordHash", "type": "string"},
+                {"internalType": "string", "name": "_address", "type": "string"}
+            ],
+            "name": "registerRider",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {"internalType": "string", "name": "_email", "type": "string"},
+                {"internalType": "string", "name": "_passwordHash", "type": "string"}
+            ],
+            "name": "loginRider",
+            "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [{"internalType": "string", "name": "_email", "type": "string"}],
+            "name": "getRider",
+            "outputs": [
+                {"internalType": "string", "name": "", "type": "string"},
+                {"internalType": "string", "name": "", "type": "string"},
+                {"internalType": "string", "name": "", "type": "string"},
+                {"internalType": "string", "name": "", "type": "string"},
+                {"internalType": "string", "name": "", "type": "string"},
+                {"internalType": "string", "name": "", "type": "string"},
+                {"internalType": "uint256", "name": "", "type": "uint256"}
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ];
+    const contractAddress = "0xFA6e82B648535b11804C383924B5C9953D2E9D63";
+
+    // IPFS Configuration
+    const IPFS_CONFIG = {
+        host: '127.0.0.1',
+        port: 5001,
+        protocol: 'http',
+        timeout: 10000
+    };
+
+    async function initializeIPFS() {
+        try {
+            // First check if local IPFS node is available
+            const testConnection = await fetch('http://127.0.0.1:5001/api/v0/version', {
+                method: 'POST'
+            });
+            
+            if (!testConnection.ok) {
+                throw new Error('Local IPFS node not responding');
+            }
+
+            // Create connection to local IPFS node
+            ipfs = window.IpfsHttpClient.create(IPFS_CONFIG);
+            
+            // Verify connection
+            const version = await ipfs.version();
+            console.log('Connected to local IPFS node:', version.version);
+            
+            // Update UI status
+            ipfsStatus.innerHTML = '<i class="fas fa-check-circle"></i> Connected to local IPFS node';
+            ipfsStatus.classList.add('connected');
+            
+            return true;
+        } catch (error) {
+            console.error('Local IPFS connection failed:', error);
+            ipfsStatus.innerHTML = '<i class="fas fa-times-circle"></i> Local IPFS node not found';
+            ipfsStatus.classList.add('error');
+            
+            // Fallback to public gateway if local node fails
+            showNotification('Could not connect to local IPFS node. Please ensure your local IPFS daemon is running.', 'warning');
+            return false;
+        }
+    }
+
+    // Upload file to IPFS
+    async function uploadToIPFS(file) {
+        if (!ipfs) throw new Error('IPFS not initialized');
+        
+        try {
+            const { cid } = await ipfs.add(file);
+            console.log('File uploaded to IPFS. CID:', cid.toString());
+            return cid.toString();
+        } catch (error) {
+            console.error('IPFS upload failed:', error);
+            throw new Error('Failed to upload file to IPFS');
+        }
+    }
+
+    // Initialize Web3 and Smart Contract
+    async function initializeBlockchain() {
+        try {
+            if (typeof window.ethereum === 'undefined') {
+                throw new Error('MetaMask not detected');
+            }
+
+            if (typeof Web3 === 'undefined') {
+                await loadScript('https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js');
+            }
+
+            web3 = new Web3(window.ethereum);
+            
+            // Request account access if needed
+            const accounts = await web3.eth.getAccounts();
+            if (accounts.length === 0) {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+            }
+            
+            riderPortalContract = new web3.eth.Contract(contractABI, contractAddress);
+            console.log('Blockchain initialized successfully');
+            return true;
+        } catch (error) {
+            console.error('Blockchain initialization error:', error);
+            return false;
+        }
+    }
+
+    // Helper function to load scripts
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+            document.head.appendChild(script);
+        });
+    }
+
+    // Wallet connection management
+    async function connectWallet() {
+        try {
+            connectMetaBtn.disabled = true;
+            connectMetaBtn.innerHTML = '<span class="spinner"></span> Connecting...';
+            
+            const success = await initializeBlockchain();
+            if (!success) throw new Error('Failed to connect to blockchain');
+            
+            const accounts = await web3.eth.getAccounts();
+            if (accounts.length === 0) throw new Error('No accounts found');
+            
+            updateWalletStatus(accounts[0]);
+            showNotification('Wallet connected successfully!', 'success');
+            return true;
+        } catch (error) {
+            console.error('Wallet connection error:', error);
+            showNotification(`Connection failed: ${error.message}`, 'error');
+            return false;
+        } finally {
+            connectMetaBtn.disabled = false;
+            connectMetaBtn.innerHTML = '<i class="fab fa-ethereum"></i> Connect with MetaMask';
+        }
+    }
+
+    function updateWalletStatus(walletAddress) {
+        const shortenedAddress = `${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}`;
+        metaStatus.innerHTML = `
+            <div class="wallet-connected">
+                <i class="fas fa-check-circle"></i>
+                <span class="wallet-address">${shortenedAddress}</span>
+            </div>
+        `;
+        metaStatus.style.display = 'block';
+        metaStatus.classList.add('connected');
+        connectMetaBtn.style.display = 'none';
+    }
+
+    // Form toggle functionality
+    showRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginCard.style.display = 'none';
+        registerCard.style.display = 'block';
+    });
+    
+    showLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        registerCard.style.display = 'none';
+        loginCard.style.display = 'block';
+    });
+
+    // Profile picture preview
+    profilePicInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                profilePreview.src = e.target.result;
+                profilePreview.classList.add('animate-pop');
+                setTimeout(() => profilePreview.classList.remove('animate-pop'), 400);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Password strength checker
+    passwordInput.addEventListener('input', () => {
+        const password = passwordInput.value;
+        const strength = checkPasswordStrength(password);
+        updatePasswordStrength(strength);
+    });
+    
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (/[A-Z]/.test(password)) strength++;
+        if (/[0-9]/.test(password)) strength++;
+        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++;
+        return strength;
+    }
+    
+    function updatePasswordStrength(strength) {
+        const strengthLabels = ["Weak", "Medium", "Strong", "Very Strong"];
+        const strengthColors = ["#DC3545", "#FD7E14", "#28A745", "#218838"];
+        const level = Math.min(strength - 1, strengthLabels.length - 1);
+        passwordStrength.value = strength;
+        strengthText.textContent = strengthLabels[level] || 'Weak';
+        strengthText.style.color = strengthColors[level] || strengthColors[0];
+    }
+
+    // Connect wallet button
+    connectMetaBtn.addEventListener('click', connectWallet);
+
+    // Registration Handler
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = {
+            firstName: document.getElementById('first-name').value,
+            lastName: document.getElementById('last-name').value,
+            email: document.getElementById('register-email').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            password: document.getElementById('password').value,
+            profilePic: profilePicInput.files[0]
+        };
+        
+        try {
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span> Creating account...';
+
+            // Validate inputs
+            if (!formData.email || !formData.password || !formData.firstName) {
+                throw new Error('Please fill in all required fields');
+            }
+
+            // Initialize blockchain
+            if (!web3 || !riderPortalContract) {
+                const initialized = await initializeBlockchain();
+                if (!initialized) throw new Error('Blockchain connection failed');
+            }
+
+            // Hash password
+            const passwordHash = await hashPassword(formData.password);
+
+            // Upload profile picture to IPFS
+            let profilePicCID = '';
+            if (formData.profilePic) {
+                profilePicCID = await uploadToIPFS(formData.profilePic);
+            }
+
+            // Get current account
+            const accounts = await web3.eth.getAccounts();
+            if (accounts.length === 0) throw new Error('Please connect your wallet');
+
+            // Register on blockchain
+            await riderPortalContract.methods.registerRider(
+                profilePicCID,
+                formData.firstName,
+                formData.lastName,
+                formData.phone,
+                formData.email,
+                passwordHash,
+                formData.address
+            ).send({ from: accounts[0] });
+
+            showNotification('Registration successful! Please login.', 'success');
+            showLogin.click();
+            
+        } catch (error) {
+            console.error('Registration error:', error);
+            showNotification(`Registration failed: ${error.message}`, 'error');
+        } finally {
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+        }
+    });
+
+    // Login Handler - Modified to store rider data in sessionStorage
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        
+        try {
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span> Authenticating...';
+            
+            if (!web3 || !riderPortalContract) {
+                const initialized = await initializeBlockchain();
+                if (!initialized) throw new Error('Blockchain connection failed');
+            }
+
+            const passwordHash = await hashPassword(password);
+            const isValid = await riderPortalContract.methods.loginRider(email, passwordHash).call();
+            if (!isValid) throw new Error('Invalid email or password');
+
+            const riderData = await riderPortalContract.methods.getRider(email).call();
+            
+            // Get profile picture URL from IPFS
+            let profilePicUrl = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; // default
+            if (riderData[0] && riderData[0].trim() !== '') {
+                try {
+                    // Use public gateway directly for the image
+                    profilePicUrl = `https://ipfs.io/ipfs/${riderData[0].trim()}`;
+                    
+                    // Verify the image exists
+                    const response = await fetch(profilePicUrl);
+                    if (!response.ok) throw new Error('Image not found on IPFS');
+                    
+                    // Create object URL if needed
+                    const blob = await response.blob();
+                    profilePicUrl = URL.createObjectURL(blob);
+                } catch (error) {
+                    console.error('Error loading profile image:', error);
+                    // Fallback to default image
+                }
+            }
+
+            // Store rider data in sessionStorage
+            const riderProfile = {
+                profilePicCID: riderData[0],
+                firstName: riderData[1],
+                lastName: riderData[2],
+                contactNumber: riderData[3],
+                email: riderData[4],
+                address: riderData[5],
+                registrationDate: riderData[6],
+                profilePicUrl: profilePicUrl
+            };
+            
+            sessionStorage.setItem('currentRider', JSON.stringify(riderProfile));
+            
+            // Redirect to requestRide page instead of dashboard
+            window.location.href = '/riderDashboard.html';
+            
+        } catch (error) {
+            console.error('Login error:', error);
+            document.getElementById('login-error').style.display = 'block';
+            document.getElementById('login-error').textContent = 
+                error.message.includes("Blockchain") ? 
+                "Please connect to MetaMask first" : 
+                "Invalid email or password";
+        } finally {
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        }
+    });
+
+    // Utility Functions
+    async function hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <span class="icon">${type === 'error' ? '⚠️' : '✓'}</span>
+            <span class="message">${message}</span>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('fade-out');
+            setTimeout(() => notification.remove(), 500);
+        }, 3000);
+    }
+
+    // Initialize the application
+    async function initializeApp() {
+        try {
+            // Initialize IPFS
+            const ipfsInitialized = await initializeIPFS();
+            if (!ipfsInitialized) {
+                showNotification('IPFS connection failed. Profile pictures will not be stored.', 'warning');
+            }
+
+            // Check for existing wallet connection
+            if (typeof window.ethereum !== 'undefined') {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                    updateWalletStatus(accounts[0]);
+                    await initializeBlockchain();
+                }
+            }
+            
+            // Set up wallet change listeners
+            if (typeof window.ethereum !== 'undefined') {
+                window.ethereum.on('accountsChanged', (accounts) => {
+                    updateWalletStatus(accounts.length > 0 ? accounts[0] : null);
+                });
+                
+                window.ethereum.on('chainChanged', () => {
+                    window.location.reload();
+                });
+            }
+            
+            console.log('Application initialized successfully');
+        } catch (error) {
+            console.error('Application initialization error:', error);
+            showNotification('Failed to initialize some components. Some features may not work.', 'error');
+        }
+    }
+
+    // Start the application
+    initializeApp();
+});
+    </script>
+</body>
+</html>
